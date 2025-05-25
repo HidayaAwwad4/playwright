@@ -6,16 +6,18 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 test.describe('Sort Feature', () => {
+    let page;
     let loginPage: LoginPage;
     let sortPage: SortPage;
 
-    test.beforeEach(async ({ page }) => {
+    test.beforeAll(async ({ browser }) => {
+        const context = await browser.newContext();
+        page = await context.newPage();
         loginPage = new LoginPage(page);
         sortPage = new SortPage(page);
 
         await loginPage.goto();
         await loginPage.login(process.env.USER_NAME!, process.env.PASSWORD!);
-
         await page.waitForSelector('[data-test="product-sort-container"]');
     });
 
